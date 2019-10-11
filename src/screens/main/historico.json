@@ -1,0 +1,32 @@
+[
+  {
+    "id": 0,
+    "datahora": "Mon Oct 07 2019 00:29:21 GMT-0300",
+    "tipo": "FORTE"
+  },
+  {
+    "id": 1,
+    "datahora": "Mon Oct 07 2019 00:29:21 GMT-0300",
+    "tipo": "MEDIO"
+  },
+  {
+    "id": 2,
+    "datahora": "Mon Oct 07 2019 00:29:21 GMT-0300",
+    "tipo": "FRACO"
+  },
+  {
+    "id": 3,
+    "datahora": "Mon Oct 07 2019 00:29:21 GMT-0300",
+    "tipo": "FORTE"
+  },
+  {
+    "id": 4,
+    "datahora": "Mon Oct 07 2019 00:29:21 GMT-0300",
+    "tipo": "MEDIO"
+  },
+  {
+    "id": 5,
+    "datahora": "Mon Oct 07 2019 00:29:21 GMT-0300",
+    "tipo": "FRACO"
+  }
+]
