@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "65417238102",
+    "firebase_url": "https://diario-epilepsia.firebaseio.com",
+    "project_id": "diario-epilepsia",
+    "storage_bucket": "diario-epilepsia.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65417238102:android:194ca9571ca210e4fd0df7",
+        "android_client_info": {
+          "package_name": "com.handyssoftware.diarioepilepsia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "65417238102-h1liqblkn9dklhnlh5ed1sdrfohmrael.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.handyssoftware.diarioepilepsia",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "65417238102-g8n7bo1hsrc008vr5he7tjmrnn3hqp0p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5_iyath65PmTivayoiYaqMAXoRlecm-M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "65417238102-g8n7bo1hsrc008vr5he7tjmrnn3hqp0p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
