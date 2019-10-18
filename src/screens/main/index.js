@@ -1,23 +1,26 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, FlatList, StatusBar} from 'react-native';
 import RoudedButton from '../../components/rouded-button';
+import firebase from 'react-native-firebase';
 import Modal from 'react-native-modal';
 import styles from './styles';
 import moment from 'moment';
 import localization from 'moment/locale/pt-br';
 import global from '../../res/global-styles';
+import {orderBy} from '../../util/orderBy';
 const tipos = {
   FRACO: 'FRACO',
   MEDIO: 'MEDIO',
   FORTE: 'FORTE',
 };
 
-const historico = require('./historico.json');
-
 export default class Main extends React.Component {
   state = {
     showModal: false,
     select: tipos.MEDIO,
+    isAuth: false,
+    user: null,
+    historico: [],
   };
 
   constructor(props) {
@@ -25,8 +28,16 @@ export default class Main extends React.Component {
     moment().locale('pt-br', localization);
   }
 
+  async componentDidMount() {
+    this.getHistorico();
+    this.listenerChangeList();
+  }
+
   render() {
-    console.log('Render');
+    const {isAuth, historico} = this.state;
+
+    if (!isAuth) return <View />;
+
     return (
       <View style={global.container}>
         <StatusBar backgroundColor="white" barStyle="dark-content" />
@@ -37,6 +48,60 @@ export default class Main extends React.Component {
     );
   }
 
+  listenerChangeList() {
+    const user = firebase.auth().currentUser;
+    const ref = firebase
+      .firestore()
+      .collection('users')
+      .doc(user.uid)
+      .collection('history');
+
+    ref.onSnapshot(docs => {
+      if (!docs) return;
+      const {historico} = this.state;
+      let list = [];
+      docs.forEach(doc => {
+        const item = Object.assign(doc.data(), {id: doc.id});
+        list.push(item);
+      });
+      if (historico === list) return;
+      console.log('ONUPDATE', list);
+      list = orderBy(list, 'date');
+      this.setState({historico: list});
+    });
+  }
+
+  async getHistorico() {
+    const user = firebase.auth().currentUser;
+    const snapshot = await firebase
+      .firestore()
+      .collection('users')
+      .doc(user.uid)
+      .collection('history')
+      .get();
+
+    if (!snapshot) {
+      this.setState({
+        user,
+        isAuth: true,
+      });
+    }
+
+    const historico = [];
+    snapshot.forEach(doc => {
+      const item = Object.assign(doc.data(), {id: doc.id});
+      historico.push(item);
+    });
+
+    console.log(historico);
+
+    this.setState({
+      user,
+      historico: historico.length === 0 ? [] : orderBy(historico, 'date'),
+      isAuth: true,
+    });
+  }
+
   renderItem(item) {
     const background =
       item.tipo === tipos.FRACO
@@ -45,7 +110,7 @@ export default class Main extends React.Component {
         ? 'orange'
         : 'red';
 
-    const data = moment(item.datahora).format('LLLL');
+    const data = moment(item.date).format('LLLL');
     return (
       <View style={styles.item}>
         <View
@@ -58,6 +123,7 @@ export default class Main extends React.Component {
   }
 
   listaHistorico() {
+    const {historico} = this.state;
     return (
       <View style={{flex: 1}}>
         <FlatList
@@ -93,7 +159,7 @@ export default class Main extends React.Component {
             {this.renderButtons()}
             <Text style={styles.textdatahora}>Data: {data}</Text>
             <Text style={styles.textdatahora}>Hora: {hora}</Text>
-            <TouchableOpacity style={styles.salvar}>
+            <TouchableOpacity style={styles.salvar} onPress={this.saveCrise}>
               <Text style={styles.textButtonSalvar}>Salvar</Text>
             </TouchableOpacity>
           </View>
@@ -142,7 +208,25 @@ export default class Main extends React.Component {
     });
   };
 
+  use;
+
   saveCrise = () => {
+    const {user, select} = this.state;
     console.log('salvando crise');
+    const data = moment().format();
+    console.log('DATA', data);
+    const trySave = firebase
+      .firestore()
+      .collection('users')
+      .doc(user.uid)
+      .collection('history')
+      .add({date: data, tipo: select});
+    trySave
+      .then(() => {
+        this.handleModal();
+      })
+      .catch(error => {
+        alert(JSON.stringify(error));
+      });
   };
 }
