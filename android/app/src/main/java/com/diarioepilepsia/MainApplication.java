@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import io.invertase.firebase.firestore.RNFirebaseFirestore;

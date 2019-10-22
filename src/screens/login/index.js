@@ -1,19 +1,13 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  Keyboard,
-} from 'react-native';
+import {View, StatusBar, Image, Alert} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import firebase from 'react-native-firebase';
 import styles from './styles';
 import Input from '../../components/textinput';
-import {ScrollView} from 'react-native-gesture-handler';
-const logo = require('../../res/img/logo/logo_login.png');
+import Button from '../../components/button';
+import colors from '../../res/colors';
+const logo = require('../../res/img/logo/logo_login.jpg');
 
 export default class Login extends React.Component {
   state = {
@@ -34,6 +28,11 @@ export default class Login extends React.Component {
       showButtonLogin: false,
     });
   };
+
+  componentDidMount() {
+    const user = firebase.auth().currentUser;
+    if (user) this.callMain();
+  }
 
   renderFieldPassword() {
     return (
@@ -59,40 +58,41 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <View style={styles.containner}>
+      <KeyboardAwareScrollView style={styles.containner}>
+        <StatusBar backgroundColor={colors.primary} barStyle="light-content" />
         <View style={styles.loginView}>
           <Image style={styles.logo} source={logo} />
         </View>
-        <ScrollView style={styles.fields}>
-          {this.renderFieldLogin()}
-          {this.renderFieldPassword()}
-          {this.buttonLogin()}
-        </ScrollView>
-      </View>
+        {this.renderFieldLogin()}
+        {this.renderFieldPassword()}
+        {this.buttonLogin()}
+      </KeyboardAwareScrollView>
     );
   }
 
   buttonLogin() {
-    const {showButtonLogin} = this.state;
-    if (!showButtonLogin) return null;
-    return (
-      <TouchableOpacity onPress={this.doLogin}>
-        <Text>Entrar</Text>
-      </TouchableOpacity>
-    );
+    return <Button title="Entrar" onPress={this.doLogin} />;
   }
 
   doLogin = () => {
-    const {login, senha} = this.state;
+    const {login, senha, showButtonLogin} = this.state;
+    if (!showButtonLogin) {
+      Alert.alert('Atenção', 'Login e senha precisam estar preenchidos');
+      return;
+    }
     firebase
       .auth()
       .signInWithEmailAndPassword(login, senha)
       .then(data => {
-        const {navigation} = this.props;
-        navigation.navigate('Main');
+        this.callMain();
       })
       .catch(error => {
-        alert(error);
+        Alert.alert('Atenção', error);
       });
+  };
+
+  callMain = () => {
+    const {navigation} = this.props;
+    navigation.navigate('Main');
   };
 }

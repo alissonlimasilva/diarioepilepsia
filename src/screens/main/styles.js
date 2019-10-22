@@ -62,6 +62,7 @@ export default StyleSheet.create({
     marginVertical: 5,
     justifyContent: 'center',
     alignItems: 'center',
+    elevation: 20,
   },
   overlay: {
     position: 'absolute',

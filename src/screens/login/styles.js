@@ -1,11 +1,12 @@
 import {StyleSheet, Dimensions} from 'react-native';
+import colors from '../../res/colors';
 const {width, height} = Dimensions.get('window');
 
 export default StyleSheet.create({
   containner: {flex: 1},
   loginView: {
     height: height * 0.4,
-    backgroundColor: 'blue',
+    backgroundColor: colors.primary,
     justifyContent: 'center',
   },
   logo: {

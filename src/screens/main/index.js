@@ -8,6 +8,7 @@ import moment from 'moment';
 import localization from 'moment/locale/pt-br';
 import global from '../../res/global-styles';
 import {orderBy} from '../../util/orderBy';
+import Button from '../../components/button';
 const tipos = {
   FRACO: 'FRACO',
   MEDIO: 'MEDIO',
@@ -159,9 +160,7 @@ export default class Main extends React.Component {
             {this.renderButtons()}
             <Text style={styles.textdatahora}>Data: {data}</Text>
             <Text style={styles.textdatahora}>Hora: {hora}</Text>
-            <TouchableOpacity style={styles.salvar} onPress={this.saveCrise}>
-              <Text style={styles.textButtonSalvar}>Salvar</Text>
-            </TouchableOpacity>
+            <Button title="Registrar" onPress={this.saveCrise} />
           </View>
         </Modal>
       </View>
