@@ -1,7 +1,7 @@
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import Login from '../screens/login';
-import Main from '../screens/main';
+import Main from '../screens/main/bottom-tab';
 
 const credentialStack = createStackNavigator(
   {
