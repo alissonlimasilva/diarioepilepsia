@@ -3,6 +3,6 @@ export default {
   bar_bottom_color: '#831170',
   icon_selected: 'white',
   icon_unselected: '#c973bb',
-  addButton: '#4682B4',
-  addButtonPressed: '#506475',
+  addButton: '#F0D813',
+  addButtonPressed: '#F9ED13',
 };

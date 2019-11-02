@@ -4,11 +4,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import localization from 'moment/locale/pt-br';
 import firebase from 'react-native-firebase';
-import RoudedButton from '../rouded-button';
 import Modal from 'react-native-modal';
 import Button from '../button';
 import styles from './styles';
 import colors from '../../res/colors';
+import RoudedButton from '../rouded-button';
 
 const SIZE = 80;
 const tipos = {

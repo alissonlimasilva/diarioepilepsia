@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, FlatList, StatusBar} from 'react-native';
+import {View, Text, FlatList, StatusBar, Image} from 'react-native';
 import firebase from 'react-native-firebase';
 import styles from './styles';
 import moment from 'moment';
@@ -28,6 +28,8 @@ export default class Main extends React.Component {
     const {isAuth} = this.state;
 
     if (!isAuth) return <View />;
+
+    if (this.state.historico.length === 0) return this.renderEmpty();
 
     return (
       <View style={global.container}>
@@ -107,6 +109,24 @@ export default class Main extends React.Component {
           style={[styles.overlay, {backgroundColor: background}]}
         />
         <Text style={styles.datahoraList}>{data}</Text>
+      </View>
+    );
+  }
+
+  renderEmpty() {
+    const source = require('../../res/img/icons/empty.png');
+    return (
+      <View style={styles.viewEmpty}>
+        <Image style={styles.imageEmpty} source={source} />
+        <Text
+          style={{
+            fontSize: 20,
+            marginTop: 20,
+            fontWeight: 'bold',
+            color: 'gray',
+          }}>
+          Sem dados
+        </Text>
       </View>
     );
   }

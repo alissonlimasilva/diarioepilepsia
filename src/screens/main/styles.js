@@ -76,4 +76,14 @@ export default StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
   },
+  viewEmpty: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageEmpty: {
+    width: width / 3,
+    height: width / 3,
+    resizeMode: 'contain',
+  },
 });

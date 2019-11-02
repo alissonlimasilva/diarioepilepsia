@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, StatusBar, Image, Alert} from 'react-native';
+import {
+  View,
+  StatusBar,
+  Image,
+  Alert,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import firebase from 'react-native-firebase';
@@ -7,6 +14,8 @@ import styles from './styles';
 import Input from '../../components/textinput';
 import Button from '../../components/button';
 import colors from '../../res/colors';
+import {mostrarAviso} from '../../util/messages';
+import {convertMessage} from '../../util/firebase-util';
 const logo = require('../../res/img/logo/logo_login.jpg');
 
 export default class Login extends React.Component {
@@ -39,6 +48,7 @@ export default class Login extends React.Component {
       <Input
         title="Senha"
         icon="lock"
+        secureTextEntry={true}
         onChangeText={this.handleTextInput}
         state="senha"
       />
@@ -66,6 +76,7 @@ export default class Login extends React.Component {
         {this.renderFieldLogin()}
         {this.renderFieldPassword()}
         {this.buttonLogin()}
+        {this.buttonSignUp()}
       </KeyboardAwareScrollView>
     );
   }
@@ -74,10 +85,29 @@ export default class Login extends React.Component {
     return <Button title="Entrar" onPress={this.doLogin} />;
   }
 
+  buttonSignUp() {
+    return (
+      <Button
+        title="Cadastrar"
+        style={{
+          backgroundColor: 'white',
+          borderWidth: 1,
+          borderColor: colors.primary,
+        }}
+        textStyle={{color: colors.primary}}
+        onPress={() => this.props.navigation.navigate('SignUp')}
+      />
+    );
+  }
+
   doLogin = () => {
     const {login, senha, showButtonLogin} = this.state;
     if (!showButtonLogin) {
-      Alert.alert('Atenção', 'Login e senha precisam estar preenchidos');
+      mostrarAviso({
+        message: 'Login e senha precisam estar preenchidos',
+        type: 'danger',
+        icon: 'danger',
+      });
       return;
     }
     firebase
@@ -87,7 +117,12 @@ export default class Login extends React.Component {
         this.callMain();
       })
       .catch(error => {
-        Alert.alert('Atenção', error);
+        console.log(error);
+        mostrarAviso({
+          message: convertMessage(error.code),
+          type: 'danger',
+          icon: 'danger',
+        });
       });
   };
 
