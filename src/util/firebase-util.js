@@ -11,7 +11,9 @@ export function convertMessage(message) {
       return 'Senha deve ter no mínimo 6 caracteres';
     case 'auth/wrong-password':
       return 'Senha incorreta';
+    case 'auth/unknown':
+      return 'Ocorreu um erro desconhecido. Verifique sua conexão com a internet e tente novamente';
     default:
-      'Ocorreu um erro';
+      return 'Ocorreu um erro';
   }
 }

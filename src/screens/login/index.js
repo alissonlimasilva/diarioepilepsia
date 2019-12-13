@@ -1,120 +1,39 @@
-import React from 'react';
-import {
-  View,
-  StatusBar,
-  Image,
-  Alert,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-
-import firebase from 'react-native-firebase';
+import React, {useState, useEffect} from 'react';
+import {View, Text, ImageBackground, StatusBar} from 'react-native';
 import styles from './styles';
-import Input from '../../components/textinput';
-import Button from '../../components/button';
-import colors from '../../res/colors';
+import {ButtonLogin, ButtonRegistrar} from './Buttons';
+import {InputLogin, InputSenha} from './Inputs';
+import {ROTAS} from '../../constants';
+import firebase from 'react-native-firebase';
 import {mostrarAviso} from '../../util/messages';
 import {convertMessage} from '../../util/firebase-util';
-const logo = require('../../res/img/logo/logo_login.jpg');
 
-export default class Login extends React.Component {
-  state = {
-    login: '',
-    senha: '',
-    showButtonLogin: false,
-  };
+const BACKGROUND = require('./background.png');
 
-  handleTextInput = (state, value) => {
-    this.setState({[state]: value}, this.checkIfFieldsAreEmpty);
-  };
+const Login = props => {
+  const [login, setLogin] = useState('');
+  const [senha, setSenha] = useState('');
+  const [logando, setLogando] = useState(false);
+  const [fieldEmpty, setFieldEmpty] = useState(true);
 
-  checkIfFieldsAreEmpty = () => {
-    const {login, senha} = this.state;
-    console.log(login, senha);
-    if (login && senha) return this.setState({showButtonLogin: true});
-    this.setState({
-      showButtonLogin: false,
-    });
-  };
-
-  componentDidMount() {
-    const user = firebase.auth().currentUser;
-    if (user) this.callMain();
-  }
-
-  renderFieldPassword() {
-    return (
-      <Input
-        title="Senha"
-        icon="lock"
-        secureTextEntry={true}
-        onChangeText={this.handleTextInput}
-        state="senha"
-      />
-    );
-  }
-
-  renderFieldLogin() {
-    return (
-      <Input
-        title="Login"
-        icon="user"
-        onChangeText={this.handleTextInput}
-        state="login"
-      />
-    );
-  }
-
-  render() {
-    return (
-      <KeyboardAwareScrollView style={styles.containner}>
-        <StatusBar backgroundColor={colors.primary} barStyle="light-content" />
-        <View style={styles.loginView}>
-          <Image style={styles.logo} source={logo} />
-        </View>
-        {this.renderFieldLogin()}
-        {this.renderFieldPassword()}
-        {this.buttonLogin()}
-        {this.buttonSignUp()}
-      </KeyboardAwareScrollView>
-    );
-  }
-
-  buttonLogin() {
-    return <Button title="Entrar" onPress={this.doLogin} />;
-  }
-
-  buttonSignUp() {
-    return (
-      <Button
-        title="Cadastrar"
-        style={{
-          backgroundColor: 'white',
-          borderWidth: 1,
-          borderColor: colors.primary,
-        }}
-        textStyle={{color: colors.primary}}
-        onPress={() => this.props.navigation.navigate('SignUp')}
-      />
-    );
-  }
-
-  doLogin = () => {
-    const {login, senha, showButtonLogin} = this.state;
-    if (!showButtonLogin) {
-      mostrarAviso({
-        message: 'Login e senha precisam estar preenchidos',
-        type: 'danger',
-        icon: 'danger',
-      });
-      return;
+  const checkEmptyFields = () => {
+    if (login && senha) {
+      setFieldEmpty(false);
+    } else {
+      setFieldEmpty(true);
     }
+  };
+
+  useEffect(checkEmptyFields, [login, senha]);
+
+  const logar = () => {
+    setLogando(true); //para a animação de loading
+    setFieldEmpty(true); // desativa botão
     firebase
       .auth()
       .signInWithEmailAndPassword(login, senha)
       .then(data => {
-        this.callMain();
+        chamarMain(); // chamar o Dashboard
       })
       .catch(error => {
         console.log(error);
@@ -123,11 +42,54 @@ export default class Login extends React.Component {
           type: 'danger',
           icon: 'danger',
         });
+      })
+      .finally(() => {
+        setLogando(false); //para a animação de loading
+        setFieldEmpty(false); // ativa botão
       });
   };
 
-  callMain = () => {
-    const {navigation} = this.props;
-    navigation.navigate('Main');
+  const chamarMain = () => {
+    props.navigation.navigate(ROTAS.main);
   };
-}
+
+  const chamarCadastrar = () => {
+    props.navigation.navigate(ROTAS.cadastro);
+  };
+
+  const handleLogin = text => setLogin(text);
+  const handleSenha = text => setSenha(text);
+
+  return (
+    <ImageBackground
+      source={BACKGROUND}
+      style={{flex: 1, width: '100%', height: '100%'}}>
+      <View style={styles.container}>
+        <StatusBar
+          translucent
+          backgroundColor="transparent"
+          barStyle="dark-content"
+        />
+        <Text style={styles.title}>Login</Text>
+        <View style={styles.viewCamposBotao}>
+          <View style={{flex: 1}}>
+            <InputLogin
+              editable={!logando}
+              value={login}
+              onChangeText={handleLogin}
+            />
+            <InputSenha
+              editable={!logando}
+              value={senha}
+              onChangeText={handleSenha}
+            />
+          </View>
+          <ButtonLogin loading={logando} onPress={logar} ativo={!fieldEmpty} />
+        </View>
+        <ButtonRegistrar onPress={chamarCadastrar} />
+      </View>
+    </ImageBackground>
+  );
+};
+
+export default Login;

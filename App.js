@@ -2,14 +2,17 @@ import React from 'react';
 import {View} from 'react-native';
 import Routes from './src/routes';
 import FlashMessage from 'react-native-flash-message';
-
+import {Provider} from 'react-redux';
+import {store} from './src/redux/store';
 class App extends React.Component {
   render() {
     return (
-      <View style={{flex: 1}}>
-        <Routes />
-        <FlashMessage position="bottom" />
-      </View>
+      <Provider store={store}>
+        <View style={{flex: 1}}>
+          <Routes />
+          <FlashMessage position="bottom" />
+        </View>
+      </Provider>
     );
   }
 }

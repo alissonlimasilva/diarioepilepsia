@@ -20,6 +20,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
     fontSize: 22,
+    marginBottom: 10,
   },
   tituloSecao: {
     color: 'black',
@@ -75,5 +76,15 @@ export default StyleSheet.create({
   datahoraList: {
     color: 'black',
     fontWeight: 'bold',
+  },
+  descricao: {
+    backgroundColor: '#d3d3d3',
+    width: '100%',
+    fontSize: 15,
+    height: 120,
+    borderRadius: 20,
+    color: 'black',
+    textAlignVertical: 'top',
+    padding: 10,
   },
 });

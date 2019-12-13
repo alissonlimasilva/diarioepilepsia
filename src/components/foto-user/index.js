@@ -2,12 +2,24 @@ import React from 'react';
 import {Image, StyleSheet, Dimensions, View} from 'react-native';
 const avatar = require('../../res/img/account/default-avatar.jpg');
 const {width} = Dimensions.get('window');
-const size = width * 0.4;
+const padrao = width * 0.4;
 
-const FotoPerfil = ({source = avatar, onPress, ...props}) => {
+const FotoPerfil = ({source = avatar, onPress, size, ...props}) => {
+  const tamanho = size ? size : padrao;
   return (
-    <View style={styles.view}>
-      <Image style={styles.image} source={source} defaultSource={source} />
+    <View
+      style={[
+        styles.view,
+        {width: tamanho, height: tamanho, borderRadius: tamanho / 2},
+      ]}>
+      <Image
+        style={[
+          styles.image,
+          {width: tamanho, height: tamanho, borderRadius: tamanho / 2},
+        ]}
+        source={source.uri ? source : avatar}
+        defaultSource={source}
+      />
     </View>
   );
 };
@@ -17,15 +29,9 @@ export default FotoPerfil;
 const styles = StyleSheet.create({
   image: {
     resizeMode: 'cover',
-    width: size,
-    height: size,
-    borderRadius: size / 2,
   },
   view: {
     alignSelf: 'center',
-    width: size,
-    height: size,
     elevation: 20,
-    borderRadius: size / 2,
   },
 });
