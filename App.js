@@ -4,7 +4,7 @@ import Routes from './src/routes';
 import FlashMessage from 'react-native-flash-message';
 import {Provider} from 'react-redux';
 import {store} from './src/redux/store';
-class App extends React.Component {
+export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
@@ -16,4 +16,3 @@ class App extends React.Component {
     );
   }
 }
-export default App;
