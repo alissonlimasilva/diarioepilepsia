@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, ImageBackground, StatusBar} from 'react-native';
-import styles from './styles';
-import {ButtonLogin, ButtonRegistrar} from './Buttons';
-import {InputLogin, InputSenha} from './Inputs';
-import {ROTAS} from '../../constants';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ImageBackground, StatusBar } from 'react-native';
 import firebase from 'react-native-firebase';
-import {mostrarAviso} from '../../util/messages';
-import {convertMessage} from '../../util/firebase-util';
+import styles from './styles';
+import { ButtonLogin, ButtonRegistrar } from './Buttons';
+import { InputLogin, InputSenha } from './Inputs';
+import { ROTAS } from '../../constants';
+import { mostrarAviso } from '../../util/messages';
+import { convertMessage } from '../../util/firebase-util';
 
 const BACKGROUND = require('./background.png');
 
@@ -27,7 +27,7 @@ const Login = props => {
   useEffect(checkEmptyFields, [login, senha]);
 
   const logar = () => {
-    setLogando(true); //para a animação de loading
+    setLogando(true); // para a animação de loading
     setFieldEmpty(true); // desativa botão
     firebase
       .auth()
@@ -44,7 +44,7 @@ const Login = props => {
         });
       })
       .finally(() => {
-        setLogando(false); //para a animação de loading
+        setLogando(false); // para a animação de loading
         setFieldEmpty(false); // ativa botão
       });
   };
@@ -63,7 +63,8 @@ const Login = props => {
   return (
     <ImageBackground
       source={BACKGROUND}
-      style={{flex: 1, width: '100%', height: '100%'}}>
+      style={{ flex: 1, width: '100%', height: '100%' }}
+    >
       <View style={styles.container}>
         <StatusBar
           translucent
@@ -72,13 +73,14 @@ const Login = props => {
         />
         <Text style={styles.title}>Login</Text>
         <View style={styles.viewCamposBotao}>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <InputLogin
               editable={!logando}
               value={login}
               onChangeText={handleLogin}
             />
             <InputSenha
+              onKeyboardPress={logar}
               editable={!logando}
               value={senha}
               onChangeText={handleSenha}
