@@ -11,4 +11,5 @@ export default {
   nivel4: '#FF8C00',
   nivel5: '#ff0000',
   gray: '#dedede',
+  roundedButton: '#831170',
 };

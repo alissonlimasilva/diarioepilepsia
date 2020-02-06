@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ImageBackground, StatusBar } from 'react-native';
 import firebase from 'react-native-firebase';
 import styles from './styles';
-import { ButtonLogin, ButtonRegistrar } from './Buttons';
-import { InputLogin, InputSenha } from './Inputs';
 import { ROTAS } from '../../constants';
 import { mostrarAviso } from '../../util/messages';
 import { convertMessage } from '../../util/firebase-util';
+import RoundedButton from '../../components/button/rounded';
+import InputIcon from '../../components/textinput/icon-input';
+import { SignupButton } from '../../components/button/login-signup';
 
-const BACKGROUND = require('./background.png');
+const BACKGROUND = require('../../../assets/images/background/login.png');
 
 const Login = props => {
   const [login, setLogin] = useState('');
@@ -26,13 +27,17 @@ const Login = props => {
 
   useEffect(checkEmptyFields, [login, senha]);
 
+  const chamarMain = () => {
+    props.navigation.navigate(ROTAS.main);
+  };
+
   const logar = () => {
     setLogando(true); // para a animação de loading
     setFieldEmpty(true); // desativa botão
     firebase
       .auth()
       .signInWithEmailAndPassword(login, senha)
-      .then(data => {
+      .then(() => {
         chamarMain(); // chamar o Dashboard
       })
       .catch(error => {
@@ -49,16 +54,41 @@ const Login = props => {
       });
   };
 
-  const chamarMain = () => {
-    props.navigation.navigate(ROTAS.main);
-  };
-
   const chamarCadastrar = () => {
     props.navigation.navigate(ROTAS.cadastro);
   };
 
-  const handleLogin = text => setLogin(text);
-  const handleSenha = text => setSenha(text);
+  const loginField = () => {
+    return (
+      <InputIcon
+        style={styles.viewFieldLogin}
+        value={login}
+        editable={!logando}
+        placeholder="Email"
+        icon="account"
+        onChangeText={setLogin}
+        KeyboardType="email-address"
+        blurOnSubmit={false}
+      />
+    );
+  };
+
+  const passwordField = () => {
+    return (
+      <InputIcon
+        style={styles.viewFieldSenha}
+        value={senha}
+        editable={!logando}
+        onChangeText={setSenha}
+        icon="lock"
+        secureTextEntry
+        blurOnSubmit={false}
+        placeholder="Senha"
+        returnKeyType="search"
+        onSubmitEditing={logar}
+      />
+    );
+  };
 
   return (
     <ImageBackground
@@ -74,21 +104,16 @@ const Login = props => {
         <Text style={styles.title}>Login</Text>
         <View style={styles.viewCamposBotao}>
           <View style={{ flex: 1 }}>
-            <InputLogin
-              editable={!logando}
-              value={login}
-              onChangeText={handleLogin}
-            />
-            <InputSenha
-              onKeyboardPress={logar}
-              editable={!logando}
-              value={senha}
-              onChangeText={handleSenha}
-            />
+            {loginField()}
+            {passwordField()}
           </View>
-          <ButtonLogin loading={logando} onPress={logar} ativo={!fieldEmpty} />
+          <RoundedButton
+            isLoading={logando}
+            onPress={logar}
+            disabled={fieldEmpty}
+          />
         </View>
-        <ButtonRegistrar onPress={chamarCadastrar} />
+        <SignupButton onPress={chamarCadastrar} />
       </View>
     </ImageBackground>
   );

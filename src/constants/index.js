@@ -4,6 +4,7 @@ export const CRISES_ACTIONS = {
 };
 
 export const ROTAS = {
+  login: 'LOGIN',
   main: 'MAIN',
   cadastro: 'CADASTRO',
 };
